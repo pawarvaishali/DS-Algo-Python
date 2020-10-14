@@ -1,0 +1,70 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+#
+# Complete the 'getTotalGoals' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts following parameters:
+#  1. STRING team
+#  2. INTEGER year
+#
+
+import requests
+
+def getTotalGoals(team, year):
+    # Write your code here
+    URL_team1 = "https://jsonmock.hackerrank.com/api/football_matches?year="+ str(year) + "&team1="+team+"&page=1"
+    URL_team2 = "https://jsonmock.hackerrank.com/api/football_matches?year="+ str(year) + "&team2="+team+"&page=1"
+        
+    # sending get request and saving the response as response object 
+    req_team1 = requests.get(url = URL_team1) 
+    req_team2 = requests.get(url = URL_team2) 
+    
+    # extracting data in json format 
+    match_details_team1 = req_team1.json()
+    # match_details_team2 = data
+    match_details_team2 = req_team2.json()
+    
+    goals_team1 = 0 
+    total_pages_team1 = match_details_team1['total_pages']
+    goals_team2 = 0
+    total_pages_team2 = match_details_team2['total_pages']
+
+    for i in range(1, total_pages_team1+1):
+        URL_team1 = "https://jsonmock.hackerrank.com/api/football_matches?year="+ str(year) + "&team1="+team+"&page=" + str(i)
+        req_team1 = requests.get(url = URL_team1) 
+        for j in range(1, len(match_details_team1['data'])+1):
+            goals_team1 += int(match_details_team1['data'][i]['team2goals'])
+    
+    print(goals_team1, goals_team2)
+    for i in range(2, total_pages_team2+1):
+        URL_team2 = "https://jsonmock.hackerrank.com/api/football_matches?year="+ str(year) + "&team2="+team+"&page=" + str(i)
+        req_team2 = requests.get(url = URL_team2) 
+        goals_team2 += match_details_team2['data']['team1goals']
+        for j in range(1, len(match_details_team2['data'])+1):
+            goals_team2 += int(match_details_team2['data'][i]['team1goals'])
+    
+    
+    print(goals_team2, goals_team2)
+    return goals_team1+goals_team2
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+ 
+    team = input()
+
+    year = int(input().strip())
+
+    result = getTotalGoals(team, year)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
