@@ -1,0 +1,57 @@
+Mr. Seth and his friend are on a secret mission to infiltrate the terrorist organization. He has to pass the last security point by entering N digit passcode. His friend has successfully got the digits of the passcode but they are not in the correct order. In his college time, he was taught Automata by a brilliant professor at his college. So, he decided to design a machine that can arrange the digits correctly to unlock the last point. It was known to Mr. Seth that the correct passcode is the lexicographically the largest combination of these digits. Now the machine can only swap K adjacent digits.
+
+Mr. Seth does not have much time, so he requires your help to operate the machine correctly.
+
+Input:
+
+The first line of input contains an integer T denoting the number of test cases.
+Each test case contains two lines, the first line contains two integers N and K. Where N is the number of digits and K denotes swaps allowed.
+Second-line contains N space-separated digits ai.
+Output:
+
+Print lexicographically largest combination of digits for each test case separated in a new line.
+
+Constraints:
+
+1 <= T  <=100
+1 <= N <= 105
+0 <= ai <= 9
+1 <= k <= n
+
+Note: Use fast i/o to handle large test cases.
+
+SAMPLE INPUT 
+2
+5 3
+3 5 1 2 1
+5 3
+3 1 2 1 2
+SAMPLE OUTPUT 
+53211
+32211
+Explanation
+In the first test case:
+The first swap is between 3 and 5. Second swap between 1 and 2.
+In the second test case:
+The first swap between 1 and 2 and the passcode will look like: 3 2 1 1 2
+The second swap between 1 and 2 and the passcode will be: 3 2 1 2 1
+The third swap is between 1 and 2 and the passcode will be: 3 2 2 1 1.
+
+
+
+
+for _ in range(int(input())):
+    n, k = map(int, input().split())
+    num = list(map(int, input().split()))
+    start = 0
+    moves = k
+    while moves > 0 and start < n:
+        ind = num[start:start+moves+1].index(max(num[start:start+moves+1]))
+        for i in range(ind+start,start,-1):
+            num[i], num[i-1] = num[i-1], num[i]
+        moves -= ind
+        start += 1
+    largest = ''
+    for s in num:
+        largest += str(s)
+    print(largest)
