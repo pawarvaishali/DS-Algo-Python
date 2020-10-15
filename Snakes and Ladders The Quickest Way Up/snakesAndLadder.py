@@ -7,12 +7,6 @@ Created on Wed Oct 14 23:51:10 2020
 
 #!/bin/python3
 
-import math
-import os
-import random
-import re
-import sys
-
 # Complete the quickestWayUp function below.
 # def quickestWayUp(ladders, snakes):
 from collections import deque
@@ -24,18 +18,18 @@ def quickestWayUp(ladders, snakes):
     paths[s] = d
 
   q = deque([(1, 0)])
-  visited = set()
+  visited = [False] * 100
   while q:
     sq, rolls = q.popleft()
     if 100 == sq:
       return rolls
 
-    visited.add(sq)
+    visited[sq-1] = True
     for i in range(1, 7):
       next = sq + i
-      if next in visited or next > 100: continue
-      print("----------")
-      print(next in paths and paths[next] or next, rolls + 1)
+      if visited[next-1] or next > 100: 
+          continue
+      
       q.append((next in paths and paths[next] or next, rolls + 1))
   return -1
 

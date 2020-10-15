@@ -1,0 +1,84 @@
+Convert Sorted Array to Binary Search Tree
+
+Solution
+Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+Example:
+
+Given the sorted array: [-10,-3,0,5,9],
+
+One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+
+
+
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+import math
+
+class Solution(object):
+    def sortedArrayToBST(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        root = binarytree(nums, 0, len(nums)-1)
+        
+        return root
+        
+def binarytree(arr, start, end):
+    if start > end: 
+        return None
+    
+    mid = int(math.ceil((start+end)/2))
+    root = TreeNode(arr[mid])
+    root.left = binarytree(arr, start, mid-1)
+    root.right = binarytree(arr, mid+1, end)
+    return root
+    
+def breadthfirstPrint(temp, elem = []):
+    if not temp:
+        return None
+    
+    q = []
+    q.append(temp)
+    elem.append(temp.val)
+    
+    while len(q):
+        temp = q[0]
+        q.pop(0)
+        
+        if temp.left:
+            q.append(temp.left)
+            elem.append(temp.left.val)
+        else:
+            elem.append(None)
+        if temp.right:
+            q.append(temp.right)
+            elem.append(temp.right.val)
+        else:
+            elem.append(None)
+            
+    return elem
+
+def inorder(temp):
+    if not temp:
+        return None
+    
+    print(temp.val)
+    inorder(temp.left)
+    inorder(temp.right)
+        
+        

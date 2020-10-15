@@ -1,0 +1,56 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        q = []
+        curr_q = []
+        val_q = []
+        level = 0
+        q.append(root)
+        
+        while len(q):
+            temp = q[0]
+            q.pop(0)
+            
+            if not temp.left:
+                val_q.append(None)
+            else:
+                curr_q.append(temp.left)
+                val_q.append(temp.left.val)
+                
+            if not temp.right:
+                val_q.append(None)
+            else:
+                curr_q.append(temp.right)
+                val_q.append(temp.right.val)
+                
+            if len(q) == 0:
+                q.extend(curr_q)
+                
+                if len(val_q) % 2 != 0:
+                    return False
+                
+                if not palindrome(val_q):
+                    return False
+                
+                level += 1
+                val_q = []
+                curr_q = []
+                
+        return True
+    
+def palindrome(arr):
+    for i in range(len(arr)//2):
+        if arr[i] != arr[len(arr)-1-i]:
+            return False
+    return True

@@ -1,0 +1,84 @@
+Fraction to Recurring Decimal
+
+
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+If multiple answers are possible, return any of them.
+
+ 
+
+Example 1:
+
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+Example 2:
+
+Input: numerator = 2, denominator = 1
+Output: "2"
+Example 3:
+
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
+Example 4:
+
+Input: numerator = 4, denominator = 333
+Output: "0.(012)"
+Example 5:
+
+Input: numerator = 1, denominator = 5
+Output: "0.2"
+ 
+
+Constraints:
+
+-231 <= numerator, denominator <= 231 - 1
+denominator != 0
+
+   Hide Hint #1  
+No scary math, just apply elementary math knowledge. Still remember how to perform a long division?
+   Hide Hint #2  
+Try a long division on 4/9, the repeating part is obvious. Now try 4/333. Do you see a pattern?
+   Hide Hint #3  
+Notice that once the remainder starts repeating, so does the divided result.
+   Hide Hint #4  
+Be wary of edge cases! List out as many test cases as you can think of and test your code thoroughly.
+
+
+class Solution:
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        n = numerator
+        d = denominator
+        if n == 0 : return '0'
+        if d == 0 : return None
+        n_neg = d_neg = 1
+        sign = ''
+        if n < 0:
+            n_neg = -1
+            n = n*n_neg
+        if d < 0:
+            d_neg = -1
+            d = d*d_neg
+            
+        pos_rem = []
+        int_div = n//d
+        frac_div = []
+        rem = n%d
+        print(int_div, rem)
+        while rem != 0 and rem not in pos_rem:
+            pos_rem.append(rem)
+            n = rem*10
+            rem = n%d
+            frac_div.append(n//d)
+            
+        if n_neg*d_neg == -1:
+            sign = '-'
+        if rem == 0:
+            if len(frac_div)>0 :
+                return sign + str(int_div) + '.' + ''.join(map(str, frac_div))
+            else:
+                return sign + str(int_div)
+        else:
+            rem_index = pos_rem.index(rem)
+            return sign + str(int_div) + '.' + ''.join(map(str, frac_div[:rem_index])) + '(' + ''.join(map(str, frac_div[rem_index:])) +')'
