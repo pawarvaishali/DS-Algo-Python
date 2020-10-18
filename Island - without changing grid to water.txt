@@ -1,0 +1,84 @@
+Number of Islands
+
+Solution
+Given an m x n 2d grid map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+ 
+
+Example 1:
+
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 300
+grid[i][j] is '0' or '1'.
+
+
+
+class Solution(object):
+   def numIslands(self, grid):
+      if len(grid) == 0:
+         return 0
+      n = len(grid)
+      m = len(grid[0])
+      visited = [[0 for i in range(m)] for j in range(n)]
+      ans = 0
+      for i in range(n):
+         for j in range(m):
+            if grid[i][j] == 1 and visited[i][j] == 0:
+               ans+=1               
+               self.visit(i,j,n,m,visited, grid) # without changing input grid
+            
+      return ans  
+  
+   def visit(self,i,j,n,m,visited, grid):
+      if i<0 or j<0 or i>=n or j>=m or visited[i][j] == 1 or grid[i][j] == 0:
+         return
+      else:
+         visited[i][j] = 1
+         
+      # includes diagonal beighbor too
+      #rowNbr = [-1, -1, -1, 0, 0, 1, 1, 1]
+      #colNbr = [-1, 0, 1, -1, 1, -1, 0, 1]
+      
+      # excluding diagona neighbor      
+      rowNbr = [-1, 1, 0, 0]
+      colNbr = [0, 0, -1, 1]
+      
+      for nbr in range(len(rowNbr)):
+          self.visit(i+rowNbr[nbr],j+colNbr[nbr],n,m,visited, grid)
+      
+if __name__ == "__main__":
+    ob1 = Solution()
+    graph = [[1, 1, 0, 0, 0], 
+            [1, 1, 0, 0, 0], 
+            [0, 0, 1, 0, 0], 
+            [0, 0, 0, 1, 1], 
+            [0, 0, 0, 1, 1]]
+    graph2 = [[1,1,0,0,0],
+             [1,1,0,0,0],
+             [0,0,0,0,0],
+             [0,0,0,1,1]]
+    print(ob1.numIslands(graph))
+    print(ob1.numIslands(graph2))
