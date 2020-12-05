@@ -1,0 +1,58 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+#
+# Complete the 'getUsernames' function below.
+#
+# The function is expected to return a STRING_ARRAY.
+# The function accepts INTEGER threshold as parameter.
+#
+# URL for cut and paste
+# https://jsonmock.hackerrank.com/api/article_users?page=<pageNumber>
+#
+
+import requests
+def getUsernames(threshold):
+    # Write your code here
+    usernames = []
+    
+    userdetailsURL = "https://jsonmock.hackerrank.com/api/article_users?page=1"
+    requestURL = requests.get(url = userdetailsURL) 
+    userdetails = requestURL.json()
+    
+    totalPages = userdetails['total_pages']
+    
+    for each in userdetails['data']:
+        if each['submission_count'] > threshold:
+            usernames.append(each['username'])
+            
+    if totalPages > 1:
+        for page in range(2, totalPages+1):
+            userdetailsURL = "https://jsonmock.hackerrank.com/api/article_users?page="+str(page)
+            requestURL = requests.get(url = userdetailsURL) 
+            userdetails = requestURL.json()
+            
+            for each in userdetails['data']:
+                if each['submission_count'] > threshold:
+                    usernames.append(each['username'])
+    
+    return usernames
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    threshold = int(input().strip())
+
+    result = getUsernames(threshold)
+
+    fptr.write('\n'.join(result))
+    fptr.write('\n')
+
+    fptr.close()
